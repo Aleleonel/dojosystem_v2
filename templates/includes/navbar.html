@@ -6,8 +6,24 @@
             DOJO SYSTEM
         </a>
 
-        <div class="text-white">
-            {{ request.user.username }}
+        <div class="d-flex align-items-center gap-3">
+
+            <span class="text-white">
+                {{ request.user.username }}
+            </span>
+
+            <form method="post" action="{% url 'logout' %}">
+
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-outline-light btn-sm">
+
+                    Sair
+
+                </button>
+
+            </form>
+
         </div>
 
     </div>
