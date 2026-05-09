@@ -13,10 +13,10 @@ class User(AbstractUser):
 
     academia = models.ForeignKey(
         Academia,
-        on_delete=models.CASCADE,
-        related_name='usuarios',
+        on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name='usuarios'
     )
 
     tipo_usuario = models.CharField(

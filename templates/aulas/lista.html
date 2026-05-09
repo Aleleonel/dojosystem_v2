@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+
+    <h1>Aulas</h1>
+
+    <a href="{% url 'criar_aula' %}" class="btn btn-dark">
+
+        Nova Aula
+
+    </a>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Modalidade</th>
+                    <th>Data</th>
+                    <th>Professor</th>
+                    <th>Horário</th>
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for aula in aulas %}
+
+                <tr>
+
+                    <td>{{ aula.modalidade }}</td>
+
+                    <td>{{ aula.data }}</td>
+
+                    <td>{{ aula.professor }}</td>
+
+                    <td>
+                        {{ aula.horario_inicio }}
+                        -
+                        {{ aula.horario_fim }}
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'chamada_aula' aula.id %}" class="btn btn-success btn-sm">
+
+                            Chamada
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,8 +1,7 @@
 from django.db import models
-
 from academias.models import Academia
 from alunos.models import Aluno
-
+from django.utils.timezone import now
 
 class Mensalidade(models.Model):
 
@@ -69,3 +68,19 @@ class Mensalidade(models.Model):
 
     def __str__(self):
         return f'{self.aluno.nome} - {self.referencia}'
+    
+    @property
+    def esta_atrasada(self):
+
+        return (
+            self.status == 'PENDENTE'
+            and self.data_vencimento < now().date()
+        )
+
+    @property
+    def vence_hoje(self):
+
+        return (
+            self.status == 'PENDENTE'
+            and self.data_vencimento == now().date()
+        )

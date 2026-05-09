@@ -86,11 +86,11 @@ class Aluno(models.Model):
     )
 
     altura = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
-        null=True,
-        blank=True
-    )
+    max_digits=5,
+    decimal_places=2,
+    null=True,
+    blank=True
+)
 
     tempo_graduacao = models.CharField(
         max_length=100,

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+
+    <h1>Mensalidades</h1>
+
+    <a href="{% url 'criar_mensalidade' %}" class="btn btn-dark">
+
+        Nova Mensalidade
+
+    </a>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Aluno</th>
+                    <th>Referência</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Vencimento</th>
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for mensalidade in mensalidades %}
+
+                <tr class="
+                    {% if mensalidade.esta_atrasada %}
+                    table-danger
+                    {% elif mensalidade.vence_hoje %}
+                    table-warning
+                    {% endif %}
+                    ">
+
+                    <td>
+                        {{ mensalidade.aluno }}
+                    </td>
+
+                    <td>
+                        {{ mensalidade.referencia }}
+                    </td>
+
+                    <td>
+                        R$ {{ mensalidade.valor }}
+                    </td>
+
+                    <td>
+
+                        {% if mensalidade.status == 'PAGO' %}
+
+                        <span class="badge bg-success">
+                            Pago
+                        </span>
+
+                        {% elif mensalidade.esta_atrasada %}
+
+                        <span class="badge bg-danger">
+                            Atrasado
+                        </span>
+
+                        {% elif mensalidade.vence_hoje %}
+
+                        <span class="badge bg-warning text-dark">
+                            Vence Hoje
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-secondary">
+                            Pendente
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ mensalidade.data_vencimento }}
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'editar_mensalidade' mensalidade.id %}" class="btn btn-sm btn-warning">
+
+                            Editar
+
+                        </a>
+
+                        <a href="{% url 'excluir_mensalidade' mensalidade.id %}" class="btn btn-sm btn-danger">
+
+                            Excluir
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
