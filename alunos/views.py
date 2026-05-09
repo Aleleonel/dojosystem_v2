@@ -1,3 +1,97 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 
-# Create your views here.
+from django.contrib.auth.decorators import login_required
+
+from .models import Aluno
+from .forms import AlunoForm
+
+
+@login_required
+def lista_alunos(request):
+
+    alunos = Aluno.objects.filter(
+        academia=request.user.academia
+    )
+
+    context = {
+        'alunos': alunos
+    }
+
+    return render(
+        request,
+        'alunos/lista.html',
+        context
+    )
+
+
+@login_required
+def criar_aluno(request):
+
+    form = AlunoForm(request.POST or None,
+                     request.FILES or None)
+
+    if form.is_valid():
+
+        aluno = form.save(commit=False)
+
+        aluno.academia = request.user.academia
+
+        aluno.save()
+
+        return redirect('lista_alunos')
+
+    context = {
+        'form': form
+    }
+
+    return render(
+        request,
+        'alunos/form.html',
+        context
+    )
+
+
+@login_required
+def editar_aluno(request, pk):
+
+    aluno = get_object_or_404(
+        Aluno,
+        pk=pk,
+        academia=request.user.academia
+    )
+
+    form = AlunoForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=aluno
+    )
+
+    if form.is_valid():
+        form.save()
+        return redirect('lista_alunos')
+
+    context = {
+        'form': form
+    }
+
+    return render(
+        request,
+        'alunos/form.html',
+        context
+    )
+
+
+@login_required
+def excluir_aluno(request, pk):
+
+    aluno = get_object_or_404(
+        Aluno,
+        pk=pk,
+        academia=request.user.academia
+    )
+
+    aluno.delete()
+
+    return redirect('lista_alunos')

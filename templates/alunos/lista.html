@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between mb-4">
+
+    <h1>Alunos</h1>
+
+    <a href="{% url 'criar_aluno' %}" class="btn btn-dark">
+
+        Novo Aluno
+
+    </a>
+
+</div>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Graduação</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for aluno in alunos %}
+
+                <tr>
+
+                    <td>
+
+                        {% if aluno.foto %}
+
+                        <img src="{{ aluno.foto.url }}" width="50" height="50" class="rounded-circle">
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ aluno.nome }}</td>
+
+                    <td>{{ aluno.graduacao }}</td>
+
+                    <td>{{ aluno.status }}</td>
+
+                    <td>
+
+                        <a href="{% url 'editar_aluno' aluno.id %}" class="btn btn-sm btn-warning">
+
+                            Editar
+
+                        </a>
+
+                        <a href="{% url 'excluir_aluno' aluno.id %}" class="btn btn-sm btn-danger">
+
+                            Excluir
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
