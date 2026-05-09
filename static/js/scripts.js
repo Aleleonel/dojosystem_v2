@@ -1,0 +1,1 @@
+console.log('DOJO SYSTEM iniciado');
