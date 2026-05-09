@@ -25,6 +25,7 @@
                 <tr>
 
                     <th>Foto</th>
+                    <th>QR Code</th>
                     <th>Nome</th>
                     <th>Graduação</th>
                     <th>Status</th>
@@ -46,6 +47,16 @@
                         {% if aluno.foto %}
 
                         <img src="{{ aluno.foto.url }}" width="50" height="50" class="rounded-circle">
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if aluno.qr_code %}
+
+                        <img src="{{ aluno.qr_code.url }}" width="70">
 
                         {% endif %}
 

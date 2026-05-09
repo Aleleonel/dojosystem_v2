@@ -2,6 +2,14 @@ from django.db import models
 
 from academias.models import Academia
 
+import qrcode
+
+from io import BytesIO
+
+from django.core.files import File
+
+from PIL import Image
+
 
 class Graduacao(models.Model):
 
@@ -47,6 +55,12 @@ class Aluno(models.Model):
         Academia,
         on_delete=models.CASCADE,
         related_name='alunos'
+    )
+
+    qr_code = models.ImageField(
+        upload_to='qrcodes/',
+        blank=True,
+        null=True
     )
 
     graduacao = models.ForeignKey(
@@ -159,3 +173,30 @@ class Aluno(models.Model):
         ) * 100
 
         return round(percentual, 1)
+    
+
+    def save(self, *args, **kwargs):
+        
+
+        super().save(*args, **kwargs)
+
+        qr_image = qrcode.make(
+            f'aluno:{self.id}'
+        )
+
+        buffer = BytesIO()
+
+        qr_image.save(
+            buffer,
+            format='PNG'
+        )
+
+        file_name = f'aluno_{self.id}.png'
+
+        self.qr_code.save(
+            file_name,
+            File(buffer),
+            save=False
+        )
+
+        super().save(*args, **kwargs)
