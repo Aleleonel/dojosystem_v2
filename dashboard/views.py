@@ -43,6 +43,10 @@ def dashboard(request):
         academia=academia,
         data_nascimento__month=now().month
     )
+    
+    ranking_frequencia = Aluno.objects.filter(
+        academia=academia
+    )
 
     context = {
         'total_alunos': total_alunos,
@@ -51,6 +55,7 @@ def dashboard(request):
         'presencas_hoje': presencas_hoje,
         'aniversariantes': aniversariantes,
         'mensalidades_atrasadas': mensalidades_atrasadas,
+        'ranking_frequencia': ranking_frequencia,
     }
 
    

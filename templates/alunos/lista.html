@@ -23,11 +23,14 @@
             <thead>
 
                 <tr>
+
                     <th>Foto</th>
                     <th>Nome</th>
                     <th>Graduação</th>
                     <th>Status</th>
+                    <th>Frequência</th>
                     <th>Ações</th>
+
                 </tr>
 
             </thead>
@@ -48,21 +51,57 @@
 
                     </td>
 
-                    <td>{{ aluno.nome }}</td>
+                    <td>
+                        {{ aluno.nome }}
+                    </td>
 
-                    <td>{{ aluno.graduacao }}</td>
+                    <td>
+                        {{ aluno.graduacao }}
+                    </td>
 
-                    <td>{{ aluno.status }}</td>
+                    <td>
+                        {{ aluno.status }}
+                    </td>
 
                     <td>
 
-                        <a href="{% url 'editar_aluno' aluno.id %}" class="btn btn-sm btn-warning">
+                        {% if aluno.percentual_frequencia >= 75 %}
+
+                        <span class="badge bg-success">
+
+                            {{ aluno.percentual_frequencia }}%
+
+                        </span>
+
+                        {% elif aluno.percentual_frequencia >= 50 %}
+
+                        <span class="badge bg-warning text-dark">
+
+                            {{ aluno.percentual_frequencia }}%
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+
+                            {{ aluno.percentual_frequencia }}%
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <a href="#" class="btn btn-warning btn-sm">
 
                             Editar
 
                         </a>
 
-                        <a href="{% url 'excluir_aluno' aluno.id %}" class="btn btn-sm btn-danger">
+                        <a href="#" class="btn btn-danger btn-sm">
 
                             Excluir
 

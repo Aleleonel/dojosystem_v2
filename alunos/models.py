@@ -119,3 +119,43 @@ class Aluno(models.Model):
 
     def __str__(self):
         return self.nome
+    
+    @property
+    def total_presencas(self):
+
+        from aulas.models import Presenca
+
+        return Presenca.objects.filter(
+            aluno=self
+        ).count()
+
+    @property
+    def total_presencas(self):
+
+        from aulas.models import Presenca
+
+        return Presenca.objects.filter(
+            aluno=self
+        ).count()
+
+    @property
+    def total_aulas(self):
+
+        from aulas.models import Aula
+
+        return Aula.objects.filter(
+            academia=self.academia
+        ).count()
+
+    @property
+    def percentual_frequencia(self):
+
+        if self.total_aulas == 0:
+            return 0
+
+        percentual = (
+            self.total_presencas
+            / self.total_aulas
+        ) * 100
+
+        return round(percentual, 1)
