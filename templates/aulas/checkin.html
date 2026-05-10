@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card shadow-sm">
+
+        <div class="card-body text-center">
+
+            <h1 class="mb-4">
+
+                Check-in QR Code
+
+            </h1>
+
+            <div id="reader" style="width: 500px; margin:auto;">
+
+            </div>
+
+            <div id="resultado" class="mt-4">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<script>
+
+    function onScanSuccess(decodedText) {
+
+        fetch("{% url 'registrar_presenca_qr' %}", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/x-www-form-urlencoded",
+
+                "X-CSRFToken":
+                    "{{ csrf_token }}"
+
+            },
+
+            body: `codigo=${decodedText}`
+
+        })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                let resultado = document.getElementById('resultado')
+
+                if (data.success) {
+
+                    resultado.innerHTML = `
+
+                <div class="alert alert-success">
+
+                    ${data.message}
+
+                </div>
+
+            `
+
+                } else {
+
+                    resultado.innerHTML = `
+
+                <div class="alert alert-danger">
+
+                    ${data.message}
+
+                </div>
+
+            `
+                }
+
+            })
+
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+
+        "reader",
+
+        {
+            fps: 10,
+            qrbox: 250
+        }
+
+    )
+
+    html5QrcodeScanner.render(onScanSuccess)
+
+</script>
+
+{% endblock %}

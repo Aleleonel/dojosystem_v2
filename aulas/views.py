@@ -13,6 +13,8 @@ from alunos.models import Aluno
 
 from accounts.models import User
 
+from django.http import JsonResponse
+
 
 @login_required
 def lista_aulas(request):
@@ -98,8 +100,63 @@ def chamada_aula(request, pk):
         'alunos': alunos
     }
 
+
     return render(
         request,
         'aulas/chamada.html',
         context
     )
+
+
+@login_required
+def qr_checkin(request):
+
+    return render(
+        request,
+        'aulas/checkin.html'
+    )
+
+
+@login_required
+def registrar_presenca_qr(request):
+
+    if request.method == 'POST':
+
+        codigo = request.POST.get('codigo')
+
+        try:
+
+            aluno_id = codigo.split(':')[1]
+
+            aluno = Aluno.objects.get(
+                id=aluno_id,
+                academia=request.user.academia
+            )
+
+            aula = Aula.objects.filter(
+                academia=request.user.academia
+            ).last()
+
+            if not aula:
+
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Nenhuma aula encontrada.'
+                })
+
+            Presenca.objects.get_or_create(
+                aula=aula,
+                aluno=aluno
+            )
+
+            return JsonResponse({
+                'success': True,
+                'message': f'{aluno.nome} registrado com sucesso!'
+            })
+
+        except:
+
+            return JsonResponse({
+                'success': False,
+                'message': 'QR Code inválido.'
+            })
