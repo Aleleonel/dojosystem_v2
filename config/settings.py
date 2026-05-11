@@ -84,11 +84,21 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-print("DATABASE_URL=", os.environ.get("DATABASE_URL"))
 DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get("DATABASE_URL")
-        )
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
+}
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise Exception("DATABASE_URL não encontrada")
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=DATABASE_URL
+    )
 }
 
 
