@@ -29,8 +29,11 @@ def lista_alunos(request):
 @login_required
 def criar_aluno(request):
 
-    form = AlunoForm(request.POST or None,
-                     request.FILES or None)
+    form = AlunoForm(
+    request.POST or None,
+    request.FILES or None,
+    academia=request.user.academia
+)
 
     if form.is_valid():
 

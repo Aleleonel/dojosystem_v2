@@ -1,6 +1,9 @@
 from django import forms
 
-from .models import Aluno
+from .models import (
+    Aluno,
+    Graduacao
+)
 
 
 class AlunoForm(forms.ModelForm):
@@ -79,7 +82,6 @@ class AlunoForm(forms.ModelForm):
                 }
             ),
 
-
             'status': forms.Select(
                 attrs={
                     'class': 'form-select'
@@ -94,3 +96,30 @@ class AlunoForm(forms.ModelForm):
             ),
 
         }
+
+    def __init__(self, *args, **kwargs):
+
+        academia = kwargs.pop(
+            'academia',
+            None
+        )
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['graduacao'].empty_label = (
+            'Selecione uma graduação'
+        )
+
+        if academia:
+
+            self.fields[
+                'graduacao'
+            ].queryset = Graduacao.objects.filter(
+                academia=academia
+            ).order_by('ordem')
+
+        else:
+
+            self.fields[
+                'graduacao'
+            ].queryset = Graduacao.objects.none()
