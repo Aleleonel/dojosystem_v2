@@ -4,7 +4,8 @@ from .views import (
     lista_mensalidades,
     criar_mensalidade,
     editar_mensalidade,
-    excluir_mensalidade
+    excluir_mensalidade,
+    gerar_mensalidades
 )
 
 urlpatterns = [
@@ -31,6 +32,12 @@ urlpatterns = [
         'excluir/<int:pk>/',
         excluir_mensalidade,
         name='excluir_mensalidade'
+    ),
+
+    path(
+        'gerar/',
+        gerar_mensalidades,
+        name='gerar_mensalidades'
     ),
 
 ]

@@ -112,10 +112,6 @@ class Aluno(models.Model):
         null=True
     )
 
-    data_vencimento = models.PositiveIntegerField(
-        default=10
-    )
-
     status = models.CharField(
         max_length=20,
         choices=StatusAluno.choices,

@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('valor', models.DecimalField(decimal_places=2, max_digits=8)),
                 ('desconto', models.DecimalField(decimal_places=2, default=0, max_digits=8)),
                 ('valor_pago', models.DecimalField(decimal_places=2, default=0, max_digits=8)),
-                ('data_vencimento', models.DateField()),
+                ('vencimento', models.DateField()),
                 ('data_pagamento', models.DateField(blank=True, null=True)),
                 ('status', models.CharField(choices=[('PENDENTE', 'Pendente'), ('PAGO', 'Pago'), ('ATRASADO', 'Atrasado'), ('CANCELADO', 'Cancelado')], default='PENDENTE', max_length=20)),
                 ('observacoes', models.TextField(blank=True, null=True)),

@@ -2,25 +2,27 @@ from django.db import models
 from academias.models import Academia
 from alunos.models import Aluno
 from django.utils.timezone import now
+from datetime import timedelta
+
 
 class Mensalidade(models.Model):
 
-    class StatusPagamento(models.TextChoices):
-        PENDENTE = 'PENDENTE', 'Pendente'
-        PAGO = 'PAGO', 'Pago'
-        ATRASADO = 'ATRASADO', 'Atrasado'
-        CANCELADO = 'CANCELADO', 'Cancelado'
+    STATUS_CHOICES = (
+
+        ('PENDENTE', 'Pendente'),
+        ('PAGO', 'Pago'),
+        ('ATRASADO', 'Atrasado'),
+
+    )
 
     academia = models.ForeignKey(
         Academia,
-        on_delete=models.CASCADE,
-        related_name='mensalidades'
+        on_delete=models.CASCADE
     )
 
     aluno = models.ForeignKey(
         Aluno,
-        on_delete=models.CASCADE,
-        related_name='mensalidades'
+        on_delete=models.CASCADE
     )
 
     referencia = models.CharField(
@@ -32,29 +34,17 @@ class Mensalidade(models.Model):
         decimal_places=2
     )
 
-    desconto = models.DecimalField(
-        max_digits=8,
-        decimal_places=2,
-        default=0
-    )
-
-    valor_pago = models.DecimalField(
-        max_digits=8,
-        decimal_places=2,
-        default=0
-    )
-
-    data_vencimento = models.DateField()
+    vencimento = models.DateField()
 
     data_pagamento = models.DateField(
-        blank=True,
-        null=True
+        null=True,
+        blank=True
     )
 
     status = models.CharField(
         max_length=20,
-        choices=StatusPagamento.choices,
-        default=StatusPagamento.PENDENTE
+        choices=STATUS_CHOICES,
+        default='PENDENTE'
     )
 
     observacoes = models.TextField(
@@ -62,25 +52,21 @@ class Mensalidade(models.Model):
         null=True
     )
 
-    criada_em = models.DateTimeField(
+    criado_em = models.DateTimeField(
         auto_now_add=True
     )
 
+    def atualizar_status(self):
+
+        if (
+            self.status == 'PENDENTE'
+            and self.vencimento < now().date()
+        ):
+
+            self.status = 'ATRASADO'
+
+            self.save()
+
     def __str__(self):
+
         return f'{self.aluno.nome} - {self.referencia}'
-    
-    @property
-    def esta_atrasada(self):
-
-        return (
-            self.status == 'PENDENTE'
-            and self.data_vencimento < now().date()
-        )
-
-    @property
-    def vence_hoje(self):
-
-        return (
-            self.status == 'PENDENTE'
-            and self.data_vencimento == now().date()
-        )

@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('peso', models.DecimalField(blank=True, decimal_places=2, max_digits=5, null=True)),
                 ('altura', models.DecimalField(blank=True, decimal_places=2, max_digits=4, null=True)),
                 ('tempo_graduacao', models.CharField(blank=True, max_length=100, null=True)),
-                ('data_vencimento', models.PositiveIntegerField(default=10)),
+                ('vencimento', models.PositiveIntegerField(default=10)),
                 ('status', models.CharField(choices=[('ATIVO', 'Ativo'), ('INATIVO', 'Inativo'), ('TRANCADO', 'Trancado')], default='ATIVO', max_length=20)),
                 ('observacoes', models.TextField(blank=True, null=True)),
                 ('data_cadastro', models.DateTimeField(auto_now_add=True)),

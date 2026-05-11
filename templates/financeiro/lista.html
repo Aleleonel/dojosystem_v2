@@ -88,10 +88,16 @@
                     </td>
 
                     <td>
-                        {{ mensalidade.data_vencimento }}
+                        {{ mensalidade.vencimento }}
                     </td>
 
                     <td>
+
+                        <a href="{% url 'gerar_mensalidades' %}" class="btn btn-success mb-3">
+
+                            Gerar Mensalidades
+
+                        </a>
 
                         <a href="{% url 'editar_mensalidade' mensalidade.id %}" class="btn btn-sm btn-warning">
 

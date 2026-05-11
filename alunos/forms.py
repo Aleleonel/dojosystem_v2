@@ -18,7 +18,6 @@ class AlunoForm(forms.ModelForm):
             'peso',
             'altura',
             'tempo_graduacao',
-            'data_vencimento',
             'status',
             'observacoes',
         ]
@@ -80,11 +79,6 @@ class AlunoForm(forms.ModelForm):
                 }
             ),
 
-            'data_vencimento': forms.NumberInput(
-                attrs={
-                    'class': 'form-control'
-                }
-            ),
 
             'status': forms.Select(
                 attrs={

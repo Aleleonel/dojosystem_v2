@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required
 
+from django.utils import timezone
+
 from django.utils.timezone import now
 from aulas.models import Aula
 
@@ -37,9 +39,8 @@ def dashboard(request):
     ).count()
 
     mensalidades_atrasadas = Mensalidade.objects.filter(
-        academia=academia,
-        status='PENDENTE',
-        data_vencimento__lt=now().date()
+    status='PENDENTE',
+    vencimento__lt=timezone.now().date()
     ).count()
 
     presencas_hoje = Presenca.objects.filter(

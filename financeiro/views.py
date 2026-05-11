@@ -8,6 +8,9 @@ from .models import Mensalidade
 from .forms import MensalidadeForm
 
 from alunos.models import Aluno
+from django.contrib import messages
+from django.utils.timezone import now
+
 
 
 @login_required
@@ -15,7 +18,7 @@ def lista_mensalidades(request):
 
     mensalidades = Mensalidade.objects.filter(
         academia=request.user.academia
-    ).order_by('-data_vencimento')
+    ).order_by('-vencimento')
 
     context = {
         'mensalidades': mensalidades
@@ -105,5 +108,54 @@ def excluir_mensalidade(request, pk):
     )
 
     mensalidade.delete()
+
+    return redirect('lista_mensalidades')
+
+
+@login_required
+def gerar_mensalidades(request):
+
+    hoje = now().date()
+
+    referencia = hoje.strftime('%m/%Y')
+
+    alunos = Aluno.objects.filter(
+        academia=request.user.academia,
+        status='ATIVO'
+    )
+
+    mensalidades_criadas = 0
+
+    for aluno in alunos:
+
+        existe = Mensalidade.objects.filter(
+            aluno=aluno,
+            referencia=referencia
+        ).exists()
+
+        if not existe:
+
+            Mensalidade.objects.create(
+
+                academia=request.user.academia,
+
+                aluno=aluno,
+
+                referencia=referencia,
+
+                valor=150.00,
+
+                vencimento=hoje.replace(day=10),
+
+                status='PENDENTE'
+
+            )
+
+            mensalidades_criadas += 1
+
+    messages.success(
+        request,
+        f'{mensalidades_criadas} mensalidades geradas.'
+    )
 
     return redirect('lista_mensalidades')

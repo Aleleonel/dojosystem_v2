@@ -10,17 +10,14 @@ class MensalidadeAdmin(admin.ModelAdmin):
         'aluno',
         'referencia',
         'valor',
-        'status',
-        'data_vencimento',
-        'academia'
+        'vencimento',
+        'status'
     )
 
     list_filter = (
         'status',
-        'academia',
     )
 
     search_fields = (
         'aluno__nome',
-        'referencia',
     )
