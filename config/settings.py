@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-%k+)=n339hzcv)a390baae@i9!2nq18w6op6ej7q@)71ksn%k%
 DEBUG = ENVIRONMENT == "development"
 
 if ENVIRONMENT == "production":
-    ALLOWED_HOSTS = [".onrender.com"]
+    ALLOWED_HOSTS = ["dojosystem-v2.onrender.com",]
 else:
     ALLOWED_HOSTS = [
         "localhost",
@@ -85,14 +85,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dojo_system',
-        'USER': 'postgres',
-        'PASSWORD': '03120808',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.parse(
+        os.environ.get("DATABASE_URL")
+        )
 }
 
 
