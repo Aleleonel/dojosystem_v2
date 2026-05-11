@@ -6,21 +6,25 @@
     Dashboard
 </h1>
 
-<div class="row">
 
-    <!-- Total alunos -->
-    <div class="col-md-3 mb-4">
+<div class="row mb-4">
 
-        <div class="card shadow-sm">
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0">
 
             <div class="card-body">
 
                 <h6 class="text-muted">
-                    Total de Alunos
+
+                    Alunos
+
                 </h6>
 
                 <h2>
+
                     {{ total_alunos }}
+
                 </h2>
 
             </div>
@@ -28,6 +32,88 @@
         </div>
 
     </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+
+                    Aulas
+
+                </h6>
+
+                <h2>
+
+                    {{ total_aulas }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+
+                    Inadimplentes
+
+                </h6>
+
+                <h2 class="text-danger">
+
+                    {{ inadimplentes }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+
+                    Faturamento
+
+                </h6>
+
+                <h2 class="text-success">
+
+                    R$ {{ faturamento }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!--colei aqui-->
+
+<div class="row">
+
+
 
     <!-- Ativos -->
     <div class="col-md-3 mb-4">
@@ -71,25 +157,7 @@
 
     </div>
 
-    <div class="col-md-3 mb-4">
 
-        <div class="card shadow-sm border-danger">
-
-            <div class="card-body">
-
-                <h6 class="text-muted">
-                    Inadimplentes
-                </h6>
-
-                <h2 class="text-danger">
-                    {{ mensalidades_atrasadas }}
-                </h2>
-
-            </div>
-
-        </div>
-
-    </div>
 
     <!-- Presença -->
     <div class="col-md-3 mb-4">
@@ -176,6 +244,25 @@
 
 </div>
 
+<!--Colei aqui para baixo-->
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
+
+        <h4 class="mb-4">
+
+            Frequência Geral
+
+        </h4>
+
+        <canvas id="graficoFrequencia">
+
+        </canvas>
+
+    </div>
+
+</div>
+
 <div class="card shadow-sm mt-4">
 
     <div class="card-body">
@@ -253,5 +340,36 @@
     </div>
 
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    const ctx = document.getElementById(
+        'graficoFrequencia'
+    )
+
+    new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: {{ meses| safe }},
+
+        datasets: [{
+
+            label: 'Presenças',
+
+            data: {{ totais| safe }}
+
+        }]
+
+    }
+
+})
+
+</script>
 
 {% endblock %}
