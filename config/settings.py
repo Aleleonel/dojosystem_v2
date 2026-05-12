@@ -13,6 +13,10 @@ SECRET_KEY = os.environ.get(
     "dev-secret-key"
 )
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://dojosystem-v2.onrender.com"
+]
+
 DEBUG = ENVIRONMENT == "development"
 
 # HOSTS
@@ -28,10 +32,11 @@ if ENVIRONMENT == "production":
     ]
 
 else:
-    ALLOWED_HOSTS = [
-        "127.0.0.1",
-        "localhost"
-    ]
+   ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "dojosystem-v2.onrender.com",
+]
 
 # APPLICATIONS
 
