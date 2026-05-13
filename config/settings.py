@@ -8,7 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
-print(f'AMBIENTE: {ENVIRONMENT}')
+# print(f'AMBIENTE: {ENVIRONMENT}')
 
 # SECURITY
 
@@ -42,7 +42,7 @@ else:
         "dojosystem-v2.onrender.com",
         ]
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 # APPLICATIONS
 
