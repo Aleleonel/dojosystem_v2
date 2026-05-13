@@ -10,10 +10,13 @@
                 </a>
             </li>
 
-            <a class="nav-link" href="{% url 'lista_alunos' %}">
-                Alunos
-            </a>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'lista_alunos' %}">
+                    Alunos
+                </a>
+            </li>
 
+            {% if request.user.tipo_usuario in 'ADMIN,PROFESSOR,MASTER' %}
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'lista_aulas' %}">
@@ -21,11 +24,9 @@
                 </a>
             </li>
 
-            <!-- <li class="nav-item">
-                <a class="nav-link" href="#">
-                    Presenças
-                </a>
-            </li> -->
+            {% endif %}
+
+            {% if request.user.tipo_usuario in 'MASTER,ADMIN' %}
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'lista_mensalidades' %}">
@@ -33,9 +34,28 @@
                 </a>
             </li>
 
-            <a class="nav-link" href="{% url 'qr_checkin' %}">
-                Check-in QR
-            </a>
+            {% endif %}
+
+
+            {% if request.user.tipo_usuario in 'MASTER,ADMIN' %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'lista_usuarios' %}">
+                    Usuarios
+                </a>
+            </li>
+
+            {% endif %}
+
+            {% if request.user.tipo_usuario in 'MASTER,ADMIN,PROFESSOR' %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'qr_checkin' %}">
+                    Check-in QR
+                </a>
+            </li>
+
+            {% endif %}
 
         </ul>
 

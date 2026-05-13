@@ -8,6 +8,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
+print(f'AMBIENTE: {ENVIRONMENT}')
 
 # SECURITY
 
@@ -34,12 +35,14 @@ if ENVIRONMENT == "production":
         "https://*.onrender.com"
     ]
 
-else:
-   ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "dojosystem-v2.onrender.com",
-]
+else:   
+   ALLOWED_HOSTS = [       
+        "127.0.0.1",
+        "localhost",
+        "dojosystem-v2.onrender.com",
+        ]
+
+ALLOWED_HOSTS = ['*']
 
 # APPLICATIONS
 
@@ -58,6 +61,7 @@ INSTALLED_APPS = [
     'aulas',
     'financeiro',
     'dashboard',
+    'usuarios',
 ]
 
 # MIDDLEWARE

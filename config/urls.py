@@ -18,6 +18,8 @@ urlpatterns = [
     path('financeiro/', include('financeiro.urls')),
 
     path('aulas/', include('aulas.urls')),
+
+    path('usuarios/', include('usuarios.urls')),
 ]
 
 if settings.DEBUG:

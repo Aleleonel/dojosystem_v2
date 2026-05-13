@@ -10,10 +10,12 @@ from .forms import MensalidadeForm
 from alunos.models import Aluno
 from django.contrib import messages
 from django.utils.timezone import now
+from core.permissions import admin_required
 
 
 
 @login_required
+@admin_required
 def lista_mensalidades(request):
 
     mensalidades = Mensalidade.objects.filter(
@@ -32,6 +34,7 @@ def lista_mensalidades(request):
 
 
 @login_required
+@admin_required
 def criar_mensalidade(request):
 
     form = MensalidadeForm(
@@ -64,6 +67,7 @@ def criar_mensalidade(request):
 
 
 @login_required
+@admin_required
 def editar_mensalidade(request, pk):
 
     mensalidade = get_object_or_404(
@@ -99,6 +103,7 @@ def editar_mensalidade(request, pk):
 
 
 @login_required
+@admin_required
 def excluir_mensalidade(request, pk):
 
     mensalidade = get_object_or_404(
@@ -113,6 +118,7 @@ def excluir_mensalidade(request, pk):
 
 
 @login_required
+@admin_required
 def gerar_mensalidades(request):
 
     hoje = now().date()
