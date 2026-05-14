@@ -6,7 +6,10 @@ from django.contrib.auth.decorators import login_required
 
 from accounts.models import User
 
-from .forms import UsuarioForm
+from .forms import (
+    UsuarioForm,
+    UsuarioUpdateForm
+)
 
 
 @login_required
@@ -41,10 +44,9 @@ def criar_usuario(request):
         return redirect('dashboard')
 
     form = UsuarioForm(
-        request.POST or None,
-        request.FILES or None,
-        usuario_logado=request.user
-    )
+    request.POST or None,
+    request.FILES or None
+)
 
     if form.is_valid():
 
@@ -68,14 +70,8 @@ def criar_usuario(request):
         context
     )
 
-
 @login_required
 def editar_usuario(request, pk):
-
-    # PROFESSOR bloqueado
-
-    if request.user.tipo_usuario == 'PROFESSOR':
-        return redirect('dashboard')
 
     usuario = get_object_or_404(
         User,
@@ -83,20 +79,24 @@ def editar_usuario(request, pk):
         academia=request.user.academia
     )
 
-    form = UsuarioForm(
+    if request.user.tipo_usuario == 'PROFESSOR':
+        return redirect('dashboard')
+
+    form = UsuarioUpdateForm(
         request.POST or None,
         request.FILES or None,
-        instance=usuario,
-        usuario_logado=request.user
+        instance=usuario
     )
+
+    if request.user.tipo_usuario == 'ADMIN':
+
+        form.fields['tipo_usuario'].choices = [
+            ('PROFESSOR', 'Professor')
+        ]
 
     if form.is_valid():
 
-        usuario = form.save(commit=False)
-
-        usuario.academia = request.user.academia
-
-        usuario.save()
+        form.save()
 
         return redirect('lista_usuarios')
 
@@ -110,11 +110,8 @@ def editar_usuario(request, pk):
         context
     )
 
-
 @login_required
 def excluir_usuario(request, pk):
-
-    # apenas MASTER pode excluir
 
     if request.user.tipo_usuario != 'MASTER':
         return redirect('dashboard')
@@ -124,11 +121,6 @@ def excluir_usuario(request, pk):
         pk=pk,
         academia=request.user.academia
     )
-
-    # evita excluir a si próprio
-
-    if usuario == request.user:
-        return redirect('lista_usuarios')
 
     usuario.delete()
 

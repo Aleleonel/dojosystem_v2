@@ -1,4 +1,5 @@
 from django import forms
+
 from django.contrib.auth.forms import UserCreationForm
 
 from accounts.models import User
@@ -25,83 +26,92 @@ class UsuarioForm(UserCreationForm):
         widgets = {
 
             'first_name': forms.TextInput(
-                attrs={
-                    'class': 'form-control'
-                }
+                attrs={'class': 'form-control'}
             ),
 
             'last_name': forms.TextInput(
-                attrs={
-                    'class': 'form-control'
-                }
+                attrs={'class': 'form-control'}
             ),
 
             'username': forms.TextInput(
-                attrs={
-                    'class': 'form-control'
-                }
+                attrs={'class': 'form-control'}
             ),
 
             'email': forms.EmailInput(
-                attrs={
-                    'class': 'form-control'
-                }
+                attrs={'class': 'form-control'}
             ),
 
             'telefone': forms.TextInput(
-                attrs={
-                    'class': 'form-control'
-                }
+                attrs={'class': 'form-control'}
             ),
 
             'foto': forms.ClearableFileInput(
-                attrs={
-                    'class': 'form-control'
-                }
+                attrs={'class': 'form-control'}
             ),
 
             'tipo_usuario': forms.Select(
-                attrs={
-                    'class': 'form-select'
-                }
+                attrs={'class': 'form-select'}
             ),
 
         }
 
-    def __init__(self, *args, **kwargs):
-
-        usuario_logado = kwargs.pop(
-            'usuario_logado',
-            None
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control'}
         )
+    )
 
-        super().__init__(*args, **kwargs)
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control'}
+        )
+    )
 
-        self.fields['password1'].widget.attrs.update({
-            'class': 'form-control'
-        })
 
-        self.fields['password2'].widget.attrs.update({
-            'class': 'form-control'
-        })
+class UsuarioUpdateForm(forms.ModelForm):
 
-        # REGRA DE PERMISSÃO
+    class Meta:
 
-        if usuario_logado:
+        model = User
 
-            # ADMIN não pode criar MASTER
+        fields = [
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'telefone',
+            'foto',
+            'tipo_usuario',
+        ]
 
-            if usuario_logado.tipo_usuario == 'ADMIN':
+        widgets = {
 
-                self.fields['tipo_usuario'].choices = [
-                    ('PROFESSOR', 'Professor')
-                ]
+            'first_name': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
 
-            # MASTER pode criar ADMIN e PROFESSOR
+            'last_name': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
 
-            elif usuario_logado.tipo_usuario == 'MASTER':
+            'username': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
 
-                self.fields['tipo_usuario'].choices = [
-                    ('ADMIN', 'Administrador'),
-                    ('PROFESSOR', 'Professor')
-                ]
+            'email': forms.EmailInput(
+                attrs={'class': 'form-control'}
+            ),
+
+            'telefone': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+
+            'foto': forms.ClearableFileInput(
+                attrs={'class': 'form-control'}
+            ),
+
+            'tipo_usuario': forms.Select(
+                attrs={'class': 'form-select'}
+            ),
+
+        }
