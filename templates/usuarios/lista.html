@@ -8,84 +8,129 @@
         Usuários
     </h2>
 
+    {% if request.user.tipo_usuario == 'MASTER' or request.user.tipo_usuario == 'ADMIN' %}
+
+    <a href="{% url 'criar_usuario' %}" class="btn btn-dark">
+        Novo Usuário
+    </a>
+
+    {% endif %}
+
 </div>
 
 <div class="card shadow-sm">
 
     <div class="card-body">
 
-        <table class="table table-hover align-middle">
+        <div class="table-responsive">
 
-            <thead>
+            <table class="table table-hover align-middle">
 
-                <tr>
-                    <th>Usuário</th>
-                    <th>Tipo</th>
-                    <th>Academia</th>
-                    <th>Status</th>
-                </tr>
+                <thead>
 
-            </thead>
+                    <tr>
 
-            <tbody>
+                        <th>Foto</th>
+                        <th>Nome</th>
+                        <th>Usuário</th>
+                        <th>Email</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
 
-                {% for usuario in usuarios %}
+                    </tr>
 
-                <tr>
+                </thead>
 
-                    <td>
-                        {{ usuario.username }}
-                    </td>
+                <tbody>
 
-                    <td>
+                    {% for usuario in usuarios %}
 
-                        <span class="badge bg-dark">
-                            {{ usuario.tipo_usuario }}
-                        </span>
+                    <tr>
 
-                    </td>
+                        <td>
 
-                    <td>
-                        {{ usuario.academia }}
-                    </td>
+                            {% if usuario.foto %}
 
-                    <td>
+                            <img src="{{ usuario.foto.url }}" width="50" height="50"
+                                class="rounded-circle object-fit-cover">
 
-                        {% if usuario.is_active %}
+                            {% else %}
 
-                        <span class="badge bg-success">
-                            Ativo
-                        </span>
+                            -
 
-                        {% else %}
+                            {% endif %}
 
-                        <span class="badge bg-danger">
-                            Inativo
-                        </span>
+                        </td>
 
-                        {% endif %}
+                        <td>
 
-                    </td>
+                            {{ usuario.first_name }} {{ usuario.last_name }}
 
-                </tr>
+                        </td>
 
-                {% empty %}
+                        <td>
 
-                <tr>
+                            {{ usuario.username }}
 
-                    <td colspan="4" class="text-center">
+                        </td>
 
-                        Nenhum usuário encontrado.
+                        <td>
 
-                    </td>
+                            {{ usuario.email }}
 
-                </tr>
+                        </td>
 
-                {% endfor %}
+                        <td>
 
-            </tbody>
+                            {{ usuario.get_tipo_usuario_display }}
 
-        </table>
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <a href="{% url 'editar_usuario' usuario.id %}" class="btn btn-sm btn-primary">
+
+                                    Editar
+
+                                </a>
+
+                                {% if request.user.tipo_usuario == 'MASTER' %}
+
+                                <a href="{% url 'excluir_usuario' usuario.id %}" class="btn btn-sm btn-danger">
+
+                                    Excluir
+
+                                </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="6" class="text-center">
+
+                            Nenhum usuário encontrado.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 

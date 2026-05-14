@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+
+                    <h4 class="mb-0">
+
+                        {% if form.instance.pk %}
+                        Editar Usuário
+                        {% else %}
+                        Novo Usuário
+                        {% endif %}
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Nome
+                                </label>
+
+                                {{ form.first_name }}
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Sobrenome
+                                </label>
+
+                                {{ form.last_name }}
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Usuário
+                            </label>
+
+                            {{ form.username }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Email
+                            </label>
+
+                            {{ form.email }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Telefone
+                            </label>
+
+                            {{ form.telefone }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Foto
+                            </label>
+
+                            {{ form.foto }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Tipo de Usuário
+                            </label>
+
+                            {{ form.tipo_usuario }}
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Senha
+                                </label>
+
+                                {{ form.password1 }}
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Confirmar Senha
+                                </label>
+
+                                {{ form.password2 }}
+
+                            </div>
+
+                        </div>
+
+                        {% if form.errors %}
+
+                        <div class="alert alert-danger">
+
+                            {{ form.errors }}
+
+                        </div>
+
+                        {% endif %}
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a href="{% url 'lista_usuarios' %}" class="btn btn-secondary">
+
+                                Cancelar
+
+                            </a>
+
+                            <button type="submit" class="btn btn-dark">
+
+                                Salvar
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
