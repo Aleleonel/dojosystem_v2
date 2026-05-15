@@ -79,8 +79,19 @@ def editar_usuario(request, pk):
         academia=request.user.academia
     )
 
+   # PROFESSOR bloqueado
+
     if request.user.tipo_usuario == 'PROFESSOR':
         return redirect('dashboard')
+
+
+    # ADMIN não pode editar MASTER
+
+    if (
+        request.user.tipo_usuario == 'ADMIN'
+        and usuario.tipo_usuario == 'MASTER'
+    ):
+        return redirect('lista_usuarios')
 
     form = UsuarioUpdateForm(
         request.POST or None,
@@ -121,6 +132,10 @@ def excluir_usuario(request, pk):
         pk=pk,
         academia=request.user.academia
     )
+    # impede excluir a si mesmo
+
+    if usuario == request.user:
+        return redirect('lista_usuarios')
 
     usuario.delete()
 
