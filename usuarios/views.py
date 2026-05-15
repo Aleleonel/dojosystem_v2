@@ -11,15 +11,17 @@ from .forms import (
     UsuarioUpdateForm
 )
 
+from permissions.decorators import (
+    master_required,
+    admin_required
+)
+
 
 @login_required
+@admin_required
 def lista_usuarios(request):
 
     # PROFESSOR não acessa usuários
-
-    if request.user.tipo_usuario == 'PROFESSOR':
-        return redirect('dashboard')
-
     usuarios = User.objects.filter(
         academia=request.user.academia
     )
@@ -34,14 +36,11 @@ def lista_usuarios(request):
         context
     )
 
-
 @login_required
+@admin_required
 def criar_usuario(request):
 
     # PROFESSOR bloqueado
-
-    if request.user.tipo_usuario == 'PROFESSOR':
-        return redirect('dashboard')
 
     form = UsuarioForm(
     request.POST or None,
@@ -98,6 +97,7 @@ def meu_perfil(request):
 
 
 @login_required
+@admin_required
 def editar_usuario(request, pk):
 
     usuario = get_object_or_404(
@@ -105,12 +105,6 @@ def editar_usuario(request, pk):
         pk=pk,
         academia=request.user.academia
     )
-
-   # PROFESSOR bloqueado
-
-    if request.user.tipo_usuario == 'PROFESSOR':
-        return redirect('dashboard')
-
 
     # ADMIN não pode editar MASTER
 
@@ -149,6 +143,7 @@ def editar_usuario(request, pk):
     )
 
 @login_required
+@master_required
 def excluir_usuario(request, pk):
 
     if request.user.tipo_usuario != 'MASTER':

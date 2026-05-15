@@ -12,6 +12,8 @@ from django.contrib import messages
 from django.utils.timezone import now
 from core.permissions import admin_required
 
+from permissions.decorators import admin_required
+
 
 
 @login_required
