@@ -5,6 +5,7 @@ from .views import (
     criar_usuario,
     editar_usuario,
     excluir_usuario,
+    meu_perfil,
 )
 
 urlpatterns = [
@@ -31,6 +32,12 @@ urlpatterns = [
         'excluir/<int:pk>/',
         excluir_usuario,
         name='excluir_usuario'
+    ),
+
+    path(
+        'meu-perfil/',
+        meu_perfil,
+        name='meu_perfil'
     ),
 
 ]

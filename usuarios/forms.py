@@ -48,7 +48,7 @@ class UsuarioForm(UserCreationForm):
             'foto': forms.ClearableFileInput(
                 attrs={'class': 'form-control'}
             ),
-
+            
             'tipo_usuario': forms.Select(
                 attrs={'class': 'form-select'}
             ),

@@ -70,6 +70,33 @@ def criar_usuario(request):
         context
     )
 
+
+@login_required
+def meu_perfil(request):
+
+    form = UsuarioUpdateForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=request.user
+    )
+
+    if form.is_valid():
+
+        form.save()
+
+        return redirect('dashboard')
+
+    context = {
+        'form': form
+    }
+
+    return render(
+        request,
+        'usuarios/meu_perfil.html',
+        context
+    )
+
+
 @login_required
 def editar_usuario(request, pk):
 
