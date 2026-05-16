@@ -17,12 +17,15 @@ from django.utils.timezone import now
 from django.db.models.functions import ExtractMonth
 
 from django.db.models import Count
+import json
 
 
 @login_required
 def dashboard(request):
 
     academia = request.user.academia
+
+    hoje = now().date()
 
     total_alunos = Aluno.objects.filter(
         academia=academia
@@ -39,8 +42,9 @@ def dashboard(request):
     ).count()
 
     mensalidades_atrasadas = Mensalidade.objects.filter(
-    status='PENDENTE',
-    vencimento__lt=timezone.now().date()
+        academia=academia,
+        status='PENDENTE',
+        vencimento__lt=hoje
     ).count()
 
     presencas_hoje = Presenca.objects.filter(
@@ -55,7 +59,9 @@ def dashboard(request):
     
     ranking_frequencia = Aluno.objects.filter(
         academia=academia
-    )
+    ).annotate(
+        frequencia_total=Count('presencas')
+    ).order_by('-frequencia_total')[:5]
 
     total_aulas = Aula.objects.filter(
     academia=request.user.academia
@@ -102,9 +108,13 @@ def dashboard(request):
         )
 
     mes_atual = now().month
+    ano_atual = now().year
+
     mensalidades_pagas = Mensalidade.objects.filter(
         status='PAGO',
-        academia=request.user.academia
+        academia=request.user.academia,
+        vencimento__month=mes_atual,
+        vencimento__year=ano_atual
     )
 
     faturamento = mensalidades_pagas.aggregate(
@@ -127,8 +137,8 @@ def dashboard(request):
         'faturamento': faturamento,
         'inadimplentes': inadimplentes,
         'total_aulas': total_aulas,
-        'meses': meses,
-        'totais': totais,
+        'meses': json.dumps(meses),
+        'totais': json.dumps(totais),
     }
 
    

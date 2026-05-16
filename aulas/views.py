@@ -15,12 +15,20 @@ from accounts.models import User
 
 from django.http import JsonResponse
 
+from core.services import aulas_da_academia
+
+from core.security import (
+
+    get_aula_da_academia
+
+)
+
 
 @login_required
 def lista_aulas(request):
 
-    aulas = Aula.objects.filter(
-        academia=request.user.academia
+    aulas = aulas_da_academia(
+        request
     ).order_by('-data')
 
     context = {
@@ -42,7 +50,8 @@ def criar_aula(request):
     )
 
     form.fields['professor'].queryset = User.objects.filter(
-        academia=request.user.academia
+        academia=request.user.academia,
+        tipo_usuario='PROFESSOR'
     )
 
     if form.is_valid():
@@ -69,10 +78,10 @@ def criar_aula(request):
 @login_required
 def chamada_aula(request, pk):
 
-    aula = get_object_or_404(
-        Aula,
-        pk=pk,
-        academia=request.user.academia
+    aula = get_aula_da_academia(
+
+        request,
+        pk
     )
 
     alunos = Aluno.objects.filter(
@@ -86,7 +95,10 @@ def chamada_aula(request, pk):
 
         for aluno_id in alunos_ids:
 
-            aluno = Aluno.objects.get(id=aluno_id)
+            aluno = Aluno.objects.get(
+                id=aluno_id,
+                academia=request.user.academia
+            )
 
             Presenca.objects.get_or_create(
                 aula=aula,

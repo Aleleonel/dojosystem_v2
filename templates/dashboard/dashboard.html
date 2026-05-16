@@ -301,31 +301,23 @@
 
                     <td>
 
-                        {% if aluno.percentual_frequencia >= 75 %}
+                        <span class="badge bg-dark">
 
-                        <span class="badge bg-success">
-
-                            {{ aluno.percentual_frequencia }}%
+                            {{ aluno.frequencia_total }} presenças
 
                         </span>
 
-                        {% elif aluno.percentual_frequencia >= 50 %}
+                    </td>
 
-                        <span class="badge bg-warning text-dark">
+                </tr>
 
-                            {{ aluno.percentual_frequencia }}%
+                {% empty %}
 
-                        </span>
+                <tr>
 
-                        {% else %}
+                    <td colspan="3">
 
-                        <span class="badge bg-danger">
-
-                            {{ aluno.percentual_frequencia }}%
-
-                        </span>
-
-                        {% endif %}
+                        Nenhuma frequência encontrada.
 
                     </td>
 

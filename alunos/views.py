@@ -7,6 +7,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Aluno
 from .forms import AlunoForm
 
+from core.services import alunos_da_academia
+
+from core.security import get_aluno_da_academia
+
 from core.permissions import (
     admin_required,
     professor_or_admin_required
@@ -17,9 +21,9 @@ from core.permissions import (
 @professor_or_admin_required
 def lista_alunos(request):
 
-    alunos = Aluno.objects.filter(
-        academia=request.user.academia
-    )
+    alunos = alunos_da_academia(
+        request
+    ).order_by('nome')
 
     context = {
         'alunos': alunos
@@ -37,10 +41,10 @@ def lista_alunos(request):
 def criar_aluno(request):
 
     form = AlunoForm(
-    request.POST or None,
-    request.FILES or None,
-    academia=request.user.academia
-)
+        request.POST or None,
+        request.FILES or None,
+        academia=request.user.academia
+    )
 
     if form.is_valid():
 
@@ -67,11 +71,10 @@ def criar_aluno(request):
 @professor_or_admin_required
 def editar_aluno(request, pk):
 
-    aluno = get_object_or_404(
-        Aluno,
-        pk=pk,
-        academia=request.user.academia
-    )
+    aluno = get_aluno_da_academia(
+        request,
+        pk
+)
 
     form = AlunoForm(
         request.POST or None,
@@ -99,12 +102,10 @@ def editar_aluno(request, pk):
 @admin_required
 def excluir_aluno(request, pk):
 
-    aluno = get_object_or_404(
-        Aluno,
-        pk=pk,
-        academia=request.user.academia
+    aluno = get_aluno_da_academia(
+        request,
+        pk
     )
-
     aluno.delete()
 
     return redirect('lista_alunos')

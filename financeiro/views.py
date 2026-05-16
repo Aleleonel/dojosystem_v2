@@ -10,18 +10,26 @@ from .forms import MensalidadeForm
 from alunos.models import Aluno
 from django.contrib import messages
 from django.utils.timezone import now
-from core.permissions import admin_required
+from core.services import mensalidades_da_academia
 
-from permissions.decorators import admin_required
+from core.security import (
+    get_mensalidade_da_academia,
+    get_aluno_da_academia
+)
+
+from core.permissions import (
+    admin_required,
+    professor_or_admin_required
+)
 
 
 
 @login_required
-@admin_required
+@professor_or_admin_required
 def lista_mensalidades(request):
 
-    mensalidades = Mensalidade.objects.filter(
-        academia=request.user.academia
+    mensalidades = mensalidades_da_academia(
+        request
     ).order_by('-vencimento')
 
     context = {
@@ -72,10 +80,9 @@ def criar_mensalidade(request):
 @admin_required
 def editar_mensalidade(request, pk):
 
-    mensalidade = get_object_or_404(
-        Mensalidade,
-        pk=pk,
-        academia=request.user.academia
+    mensalidade = get_mensalidade_da_academia(
+        request,
+        pk
     )
 
     form = MensalidadeForm(
@@ -108,10 +115,9 @@ def editar_mensalidade(request, pk):
 @admin_required
 def excluir_mensalidade(request, pk):
 
-    mensalidade = get_object_or_404(
-        Mensalidade,
-        pk=pk,
-        academia=request.user.academia
+    mensalidade = get_mensalidade_da_academia(
+        request,
+        pk
     )
 
     mensalidade.delete()
@@ -130,7 +136,7 @@ def gerar_mensalidades(request):
     alunos = Aluno.objects.filter(
         academia=request.user.academia,
         status='ATIVO'
-    )
+    ).order_by('nome')
 
     mensalidades_criadas = 0
 

@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 
 from accounts.models import User
 
+from core.services import usuarios_da_academia
+from core.security import get_usuario_da_academia
+
 from .forms import (
     UsuarioForm,
     UsuarioUpdateForm
@@ -22,9 +25,7 @@ from permissions.decorators import (
 def lista_usuarios(request):
 
     # PROFESSOR não acessa usuários
-    usuarios = User.objects.filter(
-        academia=request.user.academia
-    )
+    usuarios = usuarios_da_academia(request)
 
     context = {
         'usuarios': usuarios
@@ -55,8 +56,13 @@ def criar_usuario(request):
 
         usuario.academia = request.user.academia
 
+        usuario.set_password(
+            form.cleaned_data['password1']
+        )
+
         usuario.save()
 
+        
         return redirect('lista_usuarios')
 
     context = {
@@ -100,10 +106,9 @@ def meu_perfil(request):
 @admin_required
 def editar_usuario(request, pk):
 
-    usuario = get_object_or_404(
-        User,
-        pk=pk,
-        academia=request.user.academia
+    usuario = get_usuario_da_academia(
+        request,
+        pk
     )
 
     # ADMIN não pode editar MASTER
@@ -149,11 +154,10 @@ def excluir_usuario(request, pk):
     if request.user.tipo_usuario != 'MASTER':
         return redirect('dashboard')
 
-    usuario = get_object_or_404(
-        User,
-        pk=pk,
-        academia=request.user.academia
-    )
+    usuario = get_usuario_da_academia(
+        request,
+        pk
+    )   
     # impede excluir a si mesmo
 
     if usuario == request.user:
