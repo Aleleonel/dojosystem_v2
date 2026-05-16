@@ -42,7 +42,13 @@ class Graduacao(models.Model):
     def __str__(self):
         return f'{self.nome}'
     
+    class Meta:
 
+        ordering = ['ordem']
+
+        unique_together = [
+            ('academia', 'nome')
+        ]
 
 class Aluno(models.Model):
 
@@ -140,15 +146,6 @@ class Aluno(models.Model):
         ).count()
 
     @property
-    def total_presencas(self):
-
-        from aulas.models import Presenca
-
-        return Presenca.objects.filter(
-            aluno=self
-        ).count()
-
-    @property
     def total_aulas(self):
 
         from aulas.models import Aula
@@ -170,29 +167,57 @@ class Aluno(models.Model):
 
         return round(percentual, 1)
     
+    def clean(self):
+
+        from django.core.exceptions import ValidationError
+
+        if (
+            self.graduacao
+            and self.graduacao.academia != self.academia
+        ):
+            raise ValidationError(
+                'Graduação não pertence à academia do aluno.'
+            )
 
     def save(self, *args, **kwargs):
-        
+
+        self.full_clean()
+
+        criando = self.pk is None
 
         super().save(*args, **kwargs)
 
-        qr_image = qrcode.make(
-            f'aluno:{self.id}'
-        )
+        if criando or not self.qr_code:
 
-        buffer = BytesIO()
+            qr_image = qrcode.make(
+                f'aluno:{self.id}'
+            )
 
-        qr_image.save(
-            buffer,
-            format='PNG'
-        )
+            buffer = BytesIO()
 
-        file_name = f'aluno_{self.id}.png'
+            qr_image.save(
+                buffer,
+                format='PNG'
+            )
 
-        self.qr_code.save(
-            file_name,
-            File(buffer),
-            save=False
-        )
+            file_name = f'aluno_{self.id}.png'
 
-        super().save(*args, **kwargs)
+            self.qr_code.save(
+                file_name,
+                File(buffer),
+                save=False
+            )
+
+            super().save(update_fields=['qr_code'])
+    
+    class Meta:
+
+        ordering = ['nome']
+
+        indexes = [
+
+            models.Index(fields=['academia']),
+            models.Index(fields=['status']),
+            models.Index(fields=['graduacao']),
+
+        ]
