@@ -16,7 +16,7 @@
                 </a>
             </li>
 
-            {% if request.user.tipo_usuario in 'ADMIN,PROFESSOR,MASTER' %}
+            {% if request.user.is_authenticated %}
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'lista_aulas' %}">
@@ -26,7 +26,7 @@
 
             {% endif %}
 
-            {% if request.user.tipo_usuario in 'MASTER,ADMIN' %}
+            {% if request.user.is_admin_or_master %}
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'lista_mensalidades' %}">
@@ -37,7 +37,7 @@
             {% endif %}
 
 
-            {% if request.user.tipo_usuario in 'MASTER,ADMIN' %}
+            {% if request.user.is_admin_or_master %}
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'lista_usuarios' %}">
@@ -47,7 +47,7 @@
 
             {% endif %}
 
-            {% if request.user.tipo_usuario in 'MASTER,ADMIN,PROFESSOR' %}
+            {% if request.user.is_authenticated %}
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'qr_checkin' %}">

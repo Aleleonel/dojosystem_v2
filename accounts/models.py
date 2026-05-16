@@ -37,5 +37,24 @@ class User(AbstractUser):
         null=True
     )
 
+    @property
+    def is_master(self):
+        return self.tipo_usuario == 'MASTER'
+
+    @property
+    def is_admin(self):
+        return self.tipo_usuario == 'ADMIN'
+
+    @property
+    def is_professor(self):
+        return self.tipo_usuario == 'PROFESSOR'
+
+    @property
+    def is_admin_or_master(self):
+        return self.tipo_usuario in [
+            'MASTER',
+            'ADMIN'
+        ]
+
     def __str__(self):
         return self.username
