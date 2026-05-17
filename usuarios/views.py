@@ -46,7 +46,17 @@ def criar_usuario(request):
     form = UsuarioForm(
     request.POST or None,
     request.FILES or None
-)
+    )
+    
+    if request.user.tipo_usuario == 'ADMIN':
+
+        form.fields['tipo_usuario'].choices = [
+
+            ('ADMIN', 'Administrador'),
+
+            ('PROFESSOR', 'Professor')
+
+        ]
 
     if form.is_valid():
 
@@ -56,13 +66,8 @@ def criar_usuario(request):
 
         usuario.academia = request.user.academia
 
-        usuario.set_password(
-            form.cleaned_data['password1']
-        )
-
         usuario.save()
 
-        
         return redirect('lista_usuarios')
 
     context = {
@@ -70,10 +75,10 @@ def criar_usuario(request):
     }
 
     return render(
-        request,
-        'usuarios/form.html',
-        context
-    )
+    request,
+    'usuarios/form.html',
+    context
+)
 
 
 @login_required
@@ -128,7 +133,11 @@ def editar_usuario(request, pk):
     if request.user.tipo_usuario == 'ADMIN':
 
         form.fields['tipo_usuario'].choices = [
+
+            ('ADMIN', 'Administrador'),
+
             ('PROFESSOR', 'Professor')
+
         ]
 
     if form.is_valid():
