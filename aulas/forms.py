@@ -32,11 +32,13 @@ class AulaForm(forms.ModelForm):
             ),
 
             'data': forms.DateInput(
+                format='%d/%m/%Y',
                 attrs={
-                    'type': 'date',
-                    'class': 'form-control'
+                    'class': 'form-control datepicker',
+                    'placeholder': 'dd/mm/aaaa'
                 }
             ),
+
 
             'horario_inicio': forms.TimeInput(
                 attrs={
@@ -60,3 +62,10 @@ class AulaForm(forms.ModelForm):
             ),
 
         }
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['data'].input_formats = [
+            '%d/%m/%Y'
+        ]

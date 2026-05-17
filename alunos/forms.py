@@ -28,9 +28,10 @@ class AlunoForm(forms.ModelForm):
         widgets = {
 
             'data_nascimento': forms.DateInput(
+                format='%d/%m/%Y',
                 attrs={
-                    'type': 'date',
-                    'class': 'form-control'
+                    'class': 'form-control datepicker',
+                    'placeholder': 'dd/mm/aaaa'
                 }
             ),
 
@@ -105,6 +106,8 @@ class AlunoForm(forms.ModelForm):
         )
 
         super().__init__(*args, **kwargs)
+
+        self.fields['data_nascimento'].input_formats = ['%d/%m/%Y']
 
         self.fields['graduacao'].empty_label = (
             'Selecione uma graduação'

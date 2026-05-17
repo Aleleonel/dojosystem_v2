@@ -15,6 +15,9 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
 </head>
 
 <body>
@@ -41,6 +44,20 @@
 
     <!-- JS -->
     <script src="{% static 'js/scripts.js' %}"></script>
+
+    <script>
+
+        flatpickr(".datepicker", {
+
+            locale: "pt",
+
+            dateFormat: "d/m/Y",
+
+            allowInput: true,
+
+        });
+
+    </script>
 
 </body>
 

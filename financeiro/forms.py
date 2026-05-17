@@ -35,19 +35,25 @@ class MensalidadeForm(forms.ModelForm):
                 'class': 'form-control'
             }),
 
-            'vencimento': forms.DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date'
-            }),
+            'vencimento': forms.DateInput(
+                format='%d/%m/%Y',
+                attrs={
+                    'class': 'form-control datepicker',
+                    'placeholder': 'dd/mm/aaaa'
+                }
+            ),
 
             'status': forms.Select(attrs={
                 'class': 'form-select'
             }),
 
-            'data_pagamento': forms.DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date'
-            }),
+            'data_pagamento': forms.DateInput(
+                format='%d/%m/%Y',
+                attrs={
+                    'class': 'form-control datepicker',
+                    'placeholder': 'dd/mm/aaaa'
+                }
+            ),
 
             'observacoes': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -55,3 +61,15 @@ class MensalidadeForm(forms.ModelForm):
             }),
 
         }
+    
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['vencimento'].input_formats = [
+            '%d/%m/%Y'
+        ]
+
+        self.fields['data_pagamento'].input_formats = [
+            '%d/%m/%Y'
+        ]
